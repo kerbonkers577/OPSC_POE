@@ -83,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.tabCamera:
                     //Switch to this fragment
+                    CameraFragment camFrag = new CameraFragment();
 
+                    transaction.replace(R.id.fragment, camFrag);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     break;
             }
             return true;
