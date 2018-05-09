@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Variables
     //Views
-
     private BottomNavigationView bottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        //Test
+        //First load
+        statsFragment sf = new statsFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, sf).commit();
 
     }
 
@@ -53,20 +55,28 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         public boolean onNavigationItemSelected(MenuItem item)
         {
-            boolean selected = false;
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //txtTest.setText(item.getTitle());
 
             switch(item.getItemId())
             {
                 case R.id.tabStats:
                     //Switch to this fragment
+
                     statsFragment sf = new statsFragment();
-                    getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, sf).commit();
+
+
+                    transaction.replace(R.id.statisticsFragment, sf);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     break;
                 case R.id.tabInput:
                     //Switch to this fragment
-                    InputFragment inputfrag = new InputFragment();
-                    //getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, inputfrag).commit();
+                    InputFragment inputFrag = new InputFragment();
+
+                    transaction.replace(R.id.statisticsFragment, inputFrag);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     break;
                 case R.id.tabCamera:
 

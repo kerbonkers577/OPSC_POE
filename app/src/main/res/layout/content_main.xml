@@ -1,9 +1,8 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/statisticsFragment"
-    android:name="com.example.a16002749.opscpoe.MainActivityFragment"
+    android:id="@+id/mainFragment"
+    android:name="com.example.a16002749.opscpoe.statsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:layout="@layout/stats_fragment" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
