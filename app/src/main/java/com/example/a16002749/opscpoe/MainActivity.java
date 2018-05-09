@@ -28,8 +28,11 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //First load
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         statsFragment sf = new statsFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, sf).commit();
+        transaction.add(R.id.fragment, sf);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
     }
 
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     statsFragment sf = new statsFragment();
 
 
-                    transaction.replace(R.id.statisticsFragment, sf);
+                    transaction.replace(R.id.fragment, sf);
                     transaction.addToBackStack(null);
                     transaction.commit();
                     break;
@@ -74,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
                     //Switch to this fragment
                     InputFragment inputFrag = new InputFragment();
 
-                    transaction.replace(R.id.statisticsFragment, inputFrag);
+                    transaction.replace(R.id.fragment, inputFrag);
                     transaction.addToBackStack(null);
                     transaction.commit();
                     break;
                 case R.id.tabCamera:
-
                     //Switch to this fragment
+
                     break;
             }
             return true;
