@@ -1,5 +1,6 @@
 package com.example.a16002749.opscpoe;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Variables
     //Views
-    private TextView txtTest;
+
     private BottomNavigationView bottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //Test
-        txtTest =  findViewById(R.id.txtTest);
+
     }
 
     //Handles creation of options menu
@@ -53,18 +54,24 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(MenuItem item)
         {
             boolean selected = false;
-            txtTest.setText(item.getTitle());
-            String itemSelected = (String) item.getTitle();
-            switch(itemSelected)
+            //txtTest.setText(item.getTitle());
+
+            switch(item.getItemId())
             {
-                case "tabStats":
+                case R.id.tabStats:
+                    //Switch to this fragment
+                    statsFragment sf = new statsFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, sf).commit();
+                    break;
+                case R.id.tabInput:
+                    //Switch to this fragment
+                    InputFragment inputfrag = new InputFragment();
+                    //getSupportFragmentManager().beginTransaction().add(R.id.statisticsFragment, inputfrag).commit();
+                    break;
+                case R.id.tabCamera:
+
                     //Switch to this fragment
                     break;
-                case "tabInput":
-                    //Switch to this fragment
-                    break;
-                case "tabCamera":
-                    //Switch to this fragment
             }
             return true;
         }
