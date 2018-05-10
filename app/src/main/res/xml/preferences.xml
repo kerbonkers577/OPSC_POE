@@ -5,22 +5,29 @@
 
         <EditTextPreference
             android:defaultValue="Default value"
-            android:key="edit_text_preference_1"
+            android:key="editUsername"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Change Username" />
+        <ListPreference
+            android:key="metrics"
+            android:title="Metric/Imperial"
+            android:defaultValue="Metric"
+            android:entries="@array/metric_opt"
+            android:entryValues="@array/metric_opt"
+            android:persistent="true"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Physiological Info">
 
         <EditTextPreference
-            android:defaultValue="Default value"
-            android:key="edit_text_preference_1"
+            android:defaultValue="0.0"
+            android:key="editWeight"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Enter Weight" />
         <EditTextPreference
-            android:defaultValue="Default value"
-            android:key="edit_text_preference_1"
+            android:defaultValue="0.0"
+            android:key="editHeight"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Enter Height" />

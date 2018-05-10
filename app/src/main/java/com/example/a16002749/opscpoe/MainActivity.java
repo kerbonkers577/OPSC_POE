@@ -103,10 +103,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    //Listens for changes to the preferences and will update the application in response
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         }
     };
+
+    //Conversion method that will change the metric information between metric and imperial as need be
+    private void convertTheHertics()
+    {
+
+    }
+
+    //Conversion methods for app
+    private void convertToMetric(double imperialHeritic)
+    {
+
+    }
+
+    private void convertToImperial(double metricHeritic)
+    {
+
+    }
 }
