@@ -1,7 +1,9 @@
 package com.example.a16002749.opscpoe;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,9 +18,13 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Variables
-    //Views
+    //Preference variables that will be manipulated through the preferences
+    private double userWeight = 0.0;
+    private double userWeightGoal = 0.0;
+    private int userStepGoal = 0;
+
     private BottomNavigationView bottomNav;
+    private boolean PrefChaned = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +34,14 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //First load
+        //Fragments
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         statsFragment sf = new statsFragment();
         transaction.add(R.id.fragment, sf);
         transaction.addToBackStack(null);
         transaction.commit();
+        //Preferences loaded via preference manager
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
 
@@ -91,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             return true;
+        }
+    };
+
+    private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
         }
     };
 }
