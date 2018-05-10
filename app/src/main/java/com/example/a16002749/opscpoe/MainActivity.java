@@ -114,17 +114,21 @@ public class MainActivity extends AppCompatActivity {
     //Conversion method that will change the metric information between metric and imperial as need be
     private void convertTheHertics()
     {
-
+        //Get all the UI components using
     }
 
     //Conversion methods for app
-    private void convertToMetric(double imperialHeritic)
+    private double convertToMetric(double imperialHeritic)
     {
-
+        final double LBS_IN_KG = 0.453592;
+        double conversion = imperialHeritic * LBS_IN_KG;
+        return  conversion;
     }
 
-    private void convertToImperial(double metricHeritic)
+    private double convertToImperial(double metricHeritic)
     {
-
+        final double KG_IN_LBS = 2.20462;
+        double conversion = metricHeritic * KG_IN_LBS;
+        return conversion;
     }
 }
