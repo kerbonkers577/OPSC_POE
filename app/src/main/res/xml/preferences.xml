@@ -18,19 +18,16 @@
             android:title="Metric/Imperial"
             android:defaultValue="Metric"
             android:entries="@array/metric_opt"
-            android:entryValues="@array/metric_opt"
-            android:persistent="true"/>
+            android:entryValues="@array/metric_opt"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Physiological Info">
 
         <EditTextPreference
-            android:defaultValue="0.0"
             android:key="@string/editWeightKey"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Enter Weight" />
         <EditTextPreference
-            android:defaultValue="0.0"
             android:key="@string/editHeightKey"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -39,7 +36,6 @@
     <PreferenceCategory android:title="Goals">
 
         <EditTextPreference
-            android:defaultValue="0.0"
             android:key="@string/editWeightGoal"
             android:selectAllOnFocus="true"
             android:singleLine="true"

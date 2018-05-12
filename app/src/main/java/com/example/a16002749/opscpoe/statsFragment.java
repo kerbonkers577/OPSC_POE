@@ -25,6 +25,7 @@ public class statsFragment extends Fragment {
     private TextView height;
     private ArrayList<String> metImpSwitch = new ArrayList();
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,32 +44,26 @@ public class statsFragment extends Fragment {
         //Fragment "dies" when heading to main screen so this runs every start up
         //Instead of this senseless killing, I might pause it
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        //Get if set to metric or imperial
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
-        if(choices.equals("Metric"))
+
+
+        //Shitty way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
+        if(choices.equalsIgnoreCase("Metric"))
         {
             String iniWeight = (preferences.getString(getString(R.string.editWeightKey),""));
             String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),""));
             String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
             String iniHeight = (preferences.getString(getString(R.string.editHeightKey),""));
-
-            iniWeight = convertWeightToMetric(Double.parseDouble(iniWeight)) + "";
-            iniWeightGoal = convertWeightToMetric(Double.parseDouble(iniWeightGoal)) + "";
-            iniHeight = convertHeightToMetric(Double.parseDouble(iniHeight)) + "";
-
-            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight, "metric");
+            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
-        if(choices.equals("Imperial"))
+        else
         {
-            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),""));
-            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),""));
-            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
-            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),""));
-
-            iniWeight = convertWeightToImperial(Double.parseDouble(iniWeight)) + "";
-            iniWeightGoal = convertWeightToImperial(Double.parseDouble(iniWeightGoal)) + "";
-            iniHeight = convertHeightToImperial(Double.parseDouble(iniHeight)) + "";
-
-            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight, "imperial");
+            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),""))) + "";
+            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),""))) + "";
+            String iniStepsGoal = preferences.getString(getString(R.string.editStepsGoal),"");
+            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),""))) + "";
+            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
 
 
@@ -76,25 +71,14 @@ public class statsFragment extends Fragment {
         return view;
     }
     //Set Initial values for text
-    public void setInitialUserValues(String weight, String weightGoal, String stepsGoal, String height, String key)
+    public void setInitialUserValues(String weight, String weightGoal, String stepsGoal, String height)
     {
-        if(key.equalsIgnoreCase("metric"))
-        {
-            this.weight.setText(weight);
-            this.weightGoal.setText(weightGoal);
-            this.stepsGoal.setText(stepsGoal);
-            this.height.setText(height);
-        }
-        else
-        {
-            this.weight.setText(weight);
-            this.weightGoal.setText(weightGoal);
-            this.stepsGoal.setText(stepsGoal);
-            this.height.setText(height);
-        }
+        this.weight.setText(weight);
+        this.weightGoal.setText(weightGoal);
+        this.stepsGoal.setText(stepsGoal);
+        this.height.setText(height);
 
     }
-
     //Updates UI based on preference changes
     //To Metric
     public void convertImperialHereticsToMetric()

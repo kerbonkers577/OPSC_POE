@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private double userWeight = 0.0;
     private double userWeightGoal = 0.0;
     private int userStepGoal = 0;
-    private statsFragment statFrag;
 
     private BottomNavigationView bottomNav;
     private boolean PrefChaned = false;
@@ -88,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     //Switch to this fragment
 
                     statsFragment sf = new statsFragment();
-
-
+                    /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(sf.getContext());
+                    preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);*/
                     transaction.replace(R.id.fragment, sf);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.tabCamera:
                     //Switch to this fragment
                     CameraFragment camFrag = new CameraFragment();
-
                     transaction.replace(R.id.fragment, camFrag);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -121,14 +119,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-             statFrag =(statsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+             //statsFragment statFrag =(statsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
             if(key.equals(getString(R.string.metricsPref)))
             {
                 if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(getString(R.string.metArrPref)))
                 {
                     //TODO:Call fragment's methods
-                    //statFrag.convertImperialHereticsToMetric();
+
                 }
                 else
                 {

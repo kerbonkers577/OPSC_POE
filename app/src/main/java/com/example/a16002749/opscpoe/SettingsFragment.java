@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -121,10 +122,49 @@ public class SettingsFragment extends PreferenceFragment{
         metricsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean testPassed = false;
+
                 try
                 {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
+                    //get preference values to change
+                    double weight = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightKey), ""));
+                    double weightGoal = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightGoal), ""));
+                    double height = Double.parseDouble(sharedPreferences.getString(getString(R.string.editHeightKey), ""));
+                    //If user selects metric it will convert his preferences to metric
+                    if(newValue.equals(R.string.metArrPref)) {
+                        //Convert weight to metric
+                        weight = convertWeightToMetric(weight);
+                        String convertedWeight = weight + "";
+                        weightGoal = convertWeightToMetric(weightGoal);
+                        String convertedWeightGoal = weightGoal + "";
+
+                        //Convert height to metric
+                        height = convertHeightToMetric(height);
+                        String convertedHeight = height + "";
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(getString(R.string.editWeightKey), convertedWeight);
+                        editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
+                        editor.putString(getString(R.string.editHeightKey), convertedHeight);
+                        editor.commit();
+                    }
+                    else if(newValue.equals(R.string.impArrPref))
+                    {
+                        //Convert weight to Imperial
+                        weight = convertWeightToImperial(weight);
+                        String convertedWeight = weight + "";
+                        weightGoal = convertWeightToImperial(weightGoal);
+                        String convertedWeightGoal = weightGoal + "";
+
+                        //Convert height to Imperial
+                        height = convertHeightToImperial(height);
+                        String convertedHeight = height + "";
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(getString(R.string.editWeightKey), convertedWeight);
+                        editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
+                        editor.putString(getString(R.string.editHeightKey), convertedHeight);
+                        editor.commit();
+                    }
                 }
                 catch(Exception e)
                 {
@@ -133,7 +173,7 @@ public class SettingsFragment extends PreferenceFragment{
                     formatError.setMessage(e.getMessage());
                     formatError.show();
                 }
-                return testPassed;
+                return true;
             }
         });
 
@@ -179,13 +219,13 @@ public class SettingsFragment extends PreferenceFragment{
 
                 if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(R.string.impArrPref))
                 {
-                    //Convert weight to metric
+                    //Convert weight to imperial
                     weight = convertWeightToImperial(weight);
                     String convertedWeight = weight + "";
                     weightGoal = convertWeightToImperial(weightGoal);
                     String convertedWeightGoal = weightGoal + "";
 
-                    //Convert height to metric
+                    //Convert height to imperial
                     height = convertHeightToImperial(height);
                     String convertedHeight = height + "";
                     SharedPreferences.Editor editor = sharedPreferences.edit();
