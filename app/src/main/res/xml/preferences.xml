@@ -4,13 +4,17 @@
     <PreferenceCategory android:title="User">
 
         <EditTextPreference
-            android:defaultValue="Default value"
-            android:key="editUsername"
+            android:key="@string/usernamePref"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Change Username" />
+        <EditTextPreference
+            android:key="@string/passwordPref"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Change Password" />
         <ListPreference
-            android:key="metrics"
+            android:key="@string/metricsPref"
             android:title="Metric/Imperial"
             android:defaultValue="Metric"
             android:entries="@array/metric_opt"
@@ -21,13 +25,13 @@
 
         <EditTextPreference
             android:defaultValue="0.0"
-            android:key="editWeight"
+            android:key="@string/editWeightKey"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Enter Weight" />
         <EditTextPreference
             android:defaultValue="0.0"
-            android:key="editHeight"
+            android:key="@string/editHeightKey"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Enter Height" />
@@ -36,13 +40,13 @@
 
         <EditTextPreference
             android:defaultValue="0.0"
-            android:key="edit_text_preference_1"
+            android:key="@string/editWeightGoal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Weight Goal" />
         <EditTextPreference
             android:defaultValue="0"
-            android:key="edit_text_preference_1"
+            android:key="@string/editStepsGoal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Steps Goal" />

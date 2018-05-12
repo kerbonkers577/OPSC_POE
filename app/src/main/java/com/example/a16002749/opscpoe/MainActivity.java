@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
         //Preferences loaded via preference manager
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
     }
 
     //Handles creation of options menu
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Checks ID of selected navbar component and switches to it
     BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         public boolean onNavigationItemSelected(MenuItem item)
         {

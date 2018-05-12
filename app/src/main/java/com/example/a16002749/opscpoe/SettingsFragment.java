@@ -20,8 +20,6 @@ public class SettingsFragment extends PreferenceFragment{
     public SettingsFragment() {
     }
 
-
-
     @Override
     public void onCreate(Bundle bundle)
     {
@@ -29,7 +27,7 @@ public class SettingsFragment extends PreferenceFragment{
         addPreferencesFromResource(R.xml.preferences);
         //Manages validation on user weight changes
         //Finds the preference and attaches a listener for when it is changed
-        Preference weightPref = getPreferenceScreen().findPreference("editWeight");
+        Preference weightPref = getPreferenceScreen().findPreference(getString(R.string.editWeightKey));
         weightPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -50,8 +48,8 @@ public class SettingsFragment extends PreferenceFragment{
                 return testPassed;
             }
         });
-
-        Preference heightPref = getPreferenceScreen().findPreference("editHeight");
+        //Editing height info and validating user input
+        Preference heightPref = getPreferenceScreen().findPreference(getString(R.string.editHeightKey));
         heightPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -67,6 +65,52 @@ public class SettingsFragment extends PreferenceFragment{
                     AlertDialog.Builder formatError = new AlertDialog.Builder(getActivity());
                     formatError.setTitle("Incorrect input type");
                     formatError.setMessage("Only a number with a decimal can be entered");
+                    formatError.show();
+                }
+                return testPassed;
+            }
+        });
+
+        //Editing weight goal info and validating user input
+        Preference weightGoalPref = getPreferenceScreen().findPreference(getString(R.string.editWeightGoal));
+        weightGoalPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean testPassed = false;
+                try
+                {
+                    //If it can format it will save it as successful
+                    Double.parseDouble(newValue.toString());
+                    testPassed = true;
+                }
+                catch(NumberFormatException e)
+                {
+                    AlertDialog.Builder formatError = new AlertDialog.Builder(getActivity());
+                    formatError.setTitle("Incorrect input type");
+                    formatError.setMessage("Only a number with a decimal can be entered");
+                    formatError.show();
+                }
+                return testPassed;
+            }
+        });
+
+        //Editing steps goal info and validating user input
+        Preference stepsGoalPref = getPreferenceScreen().findPreference(getString(R.string.editStepsGoal));
+        stepsGoalPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean testPassed = false;
+                try
+                {
+                    //If it can format it will save it as successful
+                    Integer.parseInt(newValue.toString());
+                    testPassed = true;
+                }
+                catch(NumberFormatException e)
+                {
+                    AlertDialog.Builder formatError = new AlertDialog.Builder(getActivity());
+                    formatError.setTitle("Incorrect input type");
+                    formatError.setMessage("Only a number can be entered (No Decimals)");
                     formatError.show();
                 }
                 return testPassed;

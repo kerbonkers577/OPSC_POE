@@ -2,4 +2,11 @@
     <string name="app_name">OPSCPOE</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="usernamePref">editUsername</string>
+    <string name="passwordPref"></string>
+    <string name="metricsPref">metrics</string>
+    <string name="editWeightKey">editWeight</string>
+    <string name="editHeightKey">editHeight</string>
+    <string name="editWeightGoal">editWeightGoal</string>
+    <string name="editStepsGoal">editStepsGoal</string>
 </resources>
