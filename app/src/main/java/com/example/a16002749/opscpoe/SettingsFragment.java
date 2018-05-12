@@ -117,10 +117,32 @@ public class SettingsFragment extends PreferenceFragment{
             }
         });
 
+        Preference metricsPref = getPreferenceScreen().findPreference(getString(R.string.metricsPref));
+        metricsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean testPassed = false;
+                try
+                {
+
+                }
+                catch(Exception e)
+                {
+                    AlertDialog.Builder formatError = new AlertDialog.Builder(getActivity());
+                    formatError.setTitle("Metrics Option Issues");
+                    formatError.setMessage(e.getMessage());
+                    formatError.show();
+                }
+                return testPassed;
+            }
+        });
+
         /*Preferences loaded via preference manager
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);*/
     }
+
+
 
     /*
     //Listens for changes to the preferences and will update the application in response

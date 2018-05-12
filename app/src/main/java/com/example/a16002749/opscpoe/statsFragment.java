@@ -39,24 +39,65 @@ public class statsFragment extends Fragment {
 
 
 
-        /*Testing
+        //Initial launch
+        //Fragment "dies" when heading to main screen so this runs every start up
+        //Instead of this senseless killing, I might pause it
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
-        weight.setText(choices);*/
-        //Set values to text for startup
-        /*
-        weight.setText(preferences.getString(getString(R.string.editWeightKey),""));
-        weightGoal.setText(preferences.getString(getString(R.string.editWeightGoal),""));
-        stepsGoal.setText(preferences.getString(getString(R.string.editStepsGoal),""));
-        height.setText(preferences.getString(getString(R.string.editHeightKey),""));
-        */
+        if(choices.equals("Metric"))
+        {
+            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),""));
+            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),""));
+            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
+            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),""));
+
+            iniWeight = convertWeightToMetric(Double.parseDouble(iniWeight)) + "";
+            iniWeightGoal = convertWeightToMetric(Double.parseDouble(iniWeightGoal)) + "";
+            iniHeight = convertHeightToMetric(Double.parseDouble(iniHeight)) + "";
+
+            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight, "metric");
+        }
+        if(choices.equals("Imperial"))
+        {
+            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),""));
+            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),""));
+            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
+            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),""));
+
+            iniWeight = convertWeightToImperial(Double.parseDouble(iniWeight)) + "";
+            iniWeightGoal = convertWeightToImperial(Double.parseDouble(iniWeightGoal)) + "";
+            iniHeight = convertHeightToImperial(Double.parseDouble(iniHeight)) + "";
+
+            setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight, "imperial");
+        }
+
 
         //Return inflated view for display
         return view;
     }
+    //Set Initial values for text
+    public void setInitialUserValues(String weight, String weightGoal, String stepsGoal, String height, String key)
+    {
+        if(key.equalsIgnoreCase("metric"))
+        {
+            this.weight.setText(weight);
+            this.weightGoal.setText(weightGoal);
+            this.stepsGoal.setText(stepsGoal);
+            this.height.setText(height);
+        }
+        else
+        {
+            this.weight.setText(weight);
+            this.weightGoal.setText(weightGoal);
+            this.stepsGoal.setText(stepsGoal);
+            this.height.setText(height);
+        }
+
+    }
 
     //Updates UI based on preference changes
     //To Metric
-    private void convertImperialHereticsToMetric()
+    public void convertImperialHereticsToMetric()
     {
         String weightConvert = weight.getText().toString();
         String weightGoalConvert = weightGoal.getText().toString();
@@ -71,7 +112,7 @@ public class statsFragment extends Fragment {
         height.setText(heightConvert);
     }
     //To Imperial
-    private void convertMetricHereticsToImperial()
+    public void convertMetricHereticsToImperial()
     {
         String weightConvert = weight.getText().toString();
         String weightGoalConvert = weightGoal.getText().toString();

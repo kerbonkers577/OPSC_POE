@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private double userWeight = 0.0;
     private double userWeightGoal = 0.0;
     private int userStepGoal = 0;
-    private TextView tv;
+    private statsFragment statFrag;
 
     private BottomNavigationView bottomNav;
     private boolean PrefChaned = false;
@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //First load
         //Fragments
+
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         statsFragment sf = new statsFragment();
         transaction.add(R.id.fragment, sf);
@@ -51,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         //Preferences loaded via preference manager
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
-
-
 
     }
 
@@ -121,17 +121,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-            statsFragment statFrag = (statsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+             statFrag =(statsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
             if(key.equals(getString(R.string.metricsPref)))
             {
                 if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(getString(R.string.metArrPref)))
                 {
                     //TODO:Call fragment's methods
+                    //statFrag.convertImperialHereticsToMetric();
                 }
                 else
                 {
                     //TODO:Call fragment's methods
+                    //statFrag.convertMetricHereticsToImperial();
                 }
 
             }
