@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="metric_opt">
-        <item>Metric</item>
-        <item>Imperial</item>
+        <item>@string/metArrPref</item>
+        <item>@string/impArrPref</item>
     </string-array>
 </resources>

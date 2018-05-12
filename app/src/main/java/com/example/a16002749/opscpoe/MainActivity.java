@@ -1,6 +1,7 @@
 package com.example.a16002749.opscpoe;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,9 +23,14 @@ public class MainActivity extends AppCompatActivity {
     private double userWeight = 0.0;
     private double userWeightGoal = 0.0;
     private int userStepGoal = 0;
+    private TextView tv;
 
     private BottomNavigationView bottomNav;
     private boolean PrefChaned = false;
+    private TextView weight;
+    private TextView weightGoal;
+    private TextView stepsGoal;
+    private TextView height;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +46,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.fragment, sf);
         transaction.addToBackStack(null);
         transaction.commit();
+
+        //Preference change listener
         //Preferences loaded via preference manager
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
+
+
+
     }
 
     //Handles creation of options menu
@@ -104,32 +115,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     //Listens for changes to the preferences and will update the application in response
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
+            statsFragment statFrag = (statsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+            if(key.equals(getString(R.string.metricsPref)))
+            {
+                if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(getString(R.string.metArrPref)))
+                {
+                    //TODO:Call fragment's methods
+                }
+                else
+                {
+                    //TODO:Call fragment's methods
+                }
+
+            }
         }
     };
 
-    //Conversion method that will change the metric information between metric and imperial as need be
-    private void convertTheHeretics()
-    {
-        //Get all the UI components using
-    }
 
-    //Conversion methods for app
-    private double convertToMetric(double imperialHeretic)
-    {
-        final double LBS_IN_KG = 0.453592;
-        double conversion = imperialHeretic * LBS_IN_KG;
-        return  conversion;
-    }
-
-    private double convertToImperial(double metricHeretic)
-    {
-        final double KG_IN_LBS = 2.20462;
-        double conversion = metricHeretic * KG_IN_LBS;
-        return conversion;
-    }
 }
