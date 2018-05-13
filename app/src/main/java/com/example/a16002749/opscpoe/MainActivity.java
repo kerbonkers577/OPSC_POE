@@ -1,14 +1,18 @@
 package com.example.a16002749.opscpoe;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView weightGoal;
     private TextView stepsGoal;
     private TextView height;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //First load
         //Fragments
-
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         statsFragment sf = new statsFragment();
         transaction.add(R.id.fragment, sf);
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         //Preferences loaded via preference manager
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
+
 
     }
 
