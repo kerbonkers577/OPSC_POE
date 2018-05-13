@@ -128,7 +128,7 @@ public class CameraFragment extends Fragment{
 
         if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
             //TODO: Make a toast with confirmation
-            Toast.makeText(getActivity(), "This is my Toast message!",
+            Toast.makeText(getActivity(), "Picture Saved",
             Toast.LENGTH_LONG).show();
         }
     }

@@ -35,12 +35,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView stepsGoal;
     private TextView height;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("User Info");
         bottomNav = findViewById(R.id.navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         //First load
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.fragment, sf);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    toolbar.setTitle("User Info");
                     break;
                 case R.id.tabInput:
                     //Switch to this fragment
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.fragment, inputFrag);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    toolbar.setTitle("Weight Input");
                     break;
                 case R.id.tabCamera:
                     //Switch to this fragment
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.fragment, camFrag);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    toolbar.setTitle("Camera");
                     break;
             }
             return true;

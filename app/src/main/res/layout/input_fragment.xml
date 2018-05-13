@@ -1,12 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="InputViewTest" />
+        android:layout_row="0"
+        android:text="Enter Your Weight" />
+
+    <DatePicker
+        android:id="@+id/dtPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:datePickerMode="calendar" />
+
+    <TextView
+        android:id="@+id/txtStupidPlaceHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:hint="Enter weight achieved here"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/inputWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingLeft="400dp"
+        android:paddingRight="20dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="3"
+        android:clickable="true"
+        android:paddingLeft="400dp"
+        android:paddingRight="20dp"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@android:drawable/ic_input_add" />
 </GridLayout>
