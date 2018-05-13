@@ -43,7 +43,10 @@ public class CameraFragment extends Fragment{
         View view = inflater.inflate(R.layout.camera_fragment, container, false);
 
         ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},1);
+        //ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
 
+        //Source https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
+        //Basically handles suspicious activity
         builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
