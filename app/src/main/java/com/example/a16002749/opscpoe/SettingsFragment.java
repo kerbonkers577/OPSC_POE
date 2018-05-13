@@ -18,12 +18,15 @@ import android.widget.Toast;
  */
 public class SettingsFragment extends PreferenceFragment{
 
+
     public SettingsFragment() {
     }
 
     @Override
     public void onCreate(Bundle bundle)
     {
+        //TODO:Set values of weight and height based on metric being used
+
         super.onCreate(bundle);
         addPreferencesFromResource(R.xml.preferences);
         //Manages validation on user weight changes
@@ -125,7 +128,7 @@ public class SettingsFragment extends PreferenceFragment{
 
                 try
                 {
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
                     //get preference values to change
                     double weight = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightKey), ""));
@@ -143,6 +146,9 @@ public class SettingsFragment extends PreferenceFragment{
                         height = convertHeightToMetric(height);
                         String convertedHeight = height + "";
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove(getString(R.string.editWeightKey));
+                        editor.remove(getString(R.string.editWeightGoal));
+                        editor.remove(getString(R.string.editHeightKey));
                         editor.putString(getString(R.string.editWeightKey), convertedWeight);
                         editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
                         editor.putString(getString(R.string.editHeightKey), convertedHeight);
@@ -160,6 +166,9 @@ public class SettingsFragment extends PreferenceFragment{
                         height = convertHeightToImperial(height);
                         String convertedHeight = height + "";
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove(getString(R.string.editWeightKey));
+                        editor.remove(getString(R.string.editWeightGoal));
+                        editor.remove(getString(R.string.editHeightKey));
                         editor.putString(getString(R.string.editWeightKey), convertedWeight);
                         editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
                         editor.putString(getString(R.string.editHeightKey), convertedHeight);

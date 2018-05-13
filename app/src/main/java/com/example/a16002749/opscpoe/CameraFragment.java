@@ -11,7 +11,11 @@ import android.view.ViewGroup;
  * Created by Tristan Constable on 5/9/2018.
  */
 
+
+
 public class CameraFragment extends Fragment{
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
