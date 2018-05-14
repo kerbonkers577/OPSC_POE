@@ -26,6 +26,8 @@ public class SettingsFragment extends PreferenceFragment{
     public void onCreate(Bundle bundle)
     {
         //TODO:Set values of weight and height based on metric being used
+        //TODO: Set default values
+        //TODO:Retrieve values using get and put in shared preferences object
 
         super.onCreate(bundle);
         addPreferencesFromResource(R.xml.preferences);
