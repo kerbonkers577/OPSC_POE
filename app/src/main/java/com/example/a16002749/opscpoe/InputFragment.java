@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -71,7 +72,12 @@ public class InputFragment extends Fragment
             String date = day+"/"+month+"/"+year;
             //test.setText(stupid.getText() + " " +date);
 
-            String weightAchieved = weight.getText().toString();
+            String weightAchieved = "";
+            if(weight.getText() != null)
+            {
+                weightAchieved = weight.getText().toString();
+            }
+
             String fileContents = weightAchieved+","+date+"\n";
             FileOutputStream outputStream;
 
@@ -114,8 +120,15 @@ public class InputFragment extends Fragment
                     }
                 }
 
+
+                Toast myToast = Toast.makeText(getContext(), "Weight saved", Toast.LENGTH_SHORT);
+                myToast.show();
+                weight.setText("");
+
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast myToast = Toast.makeText(getContext(), "Saving Weight Failed", Toast.LENGTH_SHORT);
+                myToast.show();
             }
         }
     };

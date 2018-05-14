@@ -54,18 +54,18 @@ public class statsFragment extends Fragment {
         //Shitty way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
         if(choices.equalsIgnoreCase("Metric"))
         {
-            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),""));
-            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),""));
+            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),"")) + "Kg";
+            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),"")) + "Kg";
             String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
-            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),""));
+            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),"")) + "m";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
         else
         {
-            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),""))) + "";
-            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),""))) + "";
+            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),""))) + "lbs";
+            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),""))) + "lbs";
             String iniStepsGoal = preferences.getString(getString(R.string.editStepsGoal),"");
-            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),""))) + "";
+            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),""))) + " Feet";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
 
