@@ -1,6 +1,7 @@
 package com.example.a16002749.opscpoe;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class InputFragment extends Fragment
     private DatePicker datePicker;
     private EditText weight;
     private FloatingActionButton add;
-    private TextView stupid;
+
     private TextView test;
     private final long WEEK_TO_MILISECONDS = 604800000;
     @Override
@@ -46,29 +47,13 @@ public class InputFragment extends Fragment
         add = view.findViewById(R.id.btnAdd);
         test = view.findViewById(R.id.test);
 
-        stupid = view.findViewById(R.id.txtStupidPlaceHolder);
+
         datePicker.setMinDate(System.currentTimeMillis() - WEEK_TO_MILISECONDS);
-        weight.addTextChangedListener(weightWatcher);
+        //weight.addTextChangedListener(weightWatcher);
         add.setOnClickListener(addWeight);
+
         return view;
     }
-
-    private final TextWatcher weightWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            stupid.setText(s.toString());
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
 
 
 
@@ -90,17 +75,17 @@ public class InputFragment extends Fragment
             String fileContents = weightAchieved+","+date+"\n";
             FileOutputStream outputStream;
 
-            //TODO: Check file as to not allow more than one weight be added to a certain date
-            String filePath = "/data/data/com.example.a16002749.opscpoe/files";
+
+            String filePath = getContext().getFilesDir().getAbsolutePath();
             File newfile = new File(filePath + "/input");
             File inputFile = new File(filePath + "/input/input.txt");
 
             try {
-                if(!newfile.isDirectory())//If input dir exists
+                if(!newfile.isDirectory())//If input dir doesn't exists
                 {
+                    newfile.mkdir();
                     if(!inputFile.isFile())//Check if file exists
                     {
-                        test.setText(newfile.toString());
                         newfile.createNewFile();
                         outputStream = new FileOutputStream(inputFile, true);
                         outputStream.write(fileContents.getBytes());
@@ -112,10 +97,9 @@ public class InputFragment extends Fragment
                         outputStream.close();
                     }
                 }
-                else//If input doesn't exist
+                else//If input exist
                 {
-                    newfile.mkdir();
-                    test.setText(newfile.toString() + " Ass");
+
                     if(!inputFile.isFile())//Check if file exists
                     {
                         newfile.createNewFile();
@@ -130,7 +114,6 @@ public class InputFragment extends Fragment
                     }
                 }
 
-            stupid.setText("");//Clean up
             } catch (Exception e) {
                 e.printStackTrace();
             }
