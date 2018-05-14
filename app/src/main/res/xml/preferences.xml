@@ -7,12 +7,16 @@
             android:key="@string/usernamePref"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Change Username" />
+            android:title="Change Username"
+            android:defaultValue="false"
+            />
         <EditTextPreference
             android:key="@string/passwordPref"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Change Password" />
+            android:title="Change Password"
+            android:defaultValue="false"
+            />
         <ListPreference
             android:key="@string/metricsPref"
             android:title="Metric/Imperial"

@@ -1,8 +1,11 @@
 package com.example.a16002749.opscpoe;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.nfc.FormatException;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,9 @@ import android.widget.Toast;
  */
 public class SettingsFragment extends PreferenceFragment{
 
+    private EditTextPreference editWeight;
+    private EditTextPreference editWeightGoal;
+    private EditTextPreference editHeight;
 
     public SettingsFragment() {
     }
@@ -33,7 +39,11 @@ public class SettingsFragment extends PreferenceFragment{
         addPreferencesFromResource(R.xml.preferences);
         //Manages validation on user weight changes
         //Finds the preference and attaches a listener for when it is changed
-        Preference weightPref = getPreferenceScreen().findPreference(getString(R.string.editWeightKey));
+        editWeight = (EditTextPreference) findPreference(getString(R.string.editWeightKey));
+        editWeightGoal = (EditTextPreference) findPreference(getString(R.string.editWeightGoal));
+        editHeight = (EditTextPreference) findPreference(getString(R.string.editHeightKey));
+
+        final Preference weightPref = getPreferenceScreen().findPreference(getString(R.string.editWeightKey));
         weightPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -130,12 +140,13 @@ public class SettingsFragment extends PreferenceFragment{
 
                 try
                 {
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
                     //get preference values to change
                     double weight = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightKey), ""));
                     double weightGoal = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightGoal), ""));
                     double height = Double.parseDouble(sharedPreferences.getString(getString(R.string.editHeightKey), ""));
+
                     //If user selects metric it will convert his preferences to metric
                     if(newValue.equals(R.string.metArrPref)) {
                         //Convert weight to metric
@@ -143,18 +154,21 @@ public class SettingsFragment extends PreferenceFragment{
                         String convertedWeight = weight + "";
                         weightGoal = convertWeightToMetric(weightGoal);
                         String convertedWeightGoal = weightGoal + "";
-
                         //Convert height to metric
                         height = convertHeightToMetric(height);
                         String convertedHeight = height + "";
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove(getString(R.string.editWeightKey));
-                        editor.remove(getString(R.string.editWeightGoal));
-                        editor.remove(getString(R.string.editHeightKey));
+
+                        editWeight.setText(convertedWeight);
+                        editHeight.setText(convertedHeight);
+                        editWeightGoal.setText(convertedWeightGoal);
+
+                        /*SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(getString(R.string.editWeightKey), convertedWeight);
                         editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
                         editor.putString(getString(R.string.editHeightKey), convertedHeight);
-                        editor.commit();
+                        editor.commit();*/
+
+
                     }
                     else if(newValue.equals(R.string.impArrPref))
                     {
@@ -167,14 +181,17 @@ public class SettingsFragment extends PreferenceFragment{
                         //Convert height to Imperial
                         height = convertHeightToImperial(height);
                         String convertedHeight = height + "";
+
+                        editWeight.setText(convertedWeight);
+                        editHeight.setText(convertedHeight);
+                        editWeightGoal.setText(convertedWeightGoal);
+
+                        /*
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove(getString(R.string.editWeightKey));
-                        editor.remove(getString(R.string.editWeightGoal));
-                        editor.remove(getString(R.string.editHeightKey));
                         editor.putString(getString(R.string.editWeightKey), convertedWeight);
                         editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
                         editor.putString(getString(R.string.editHeightKey), convertedHeight);
-                        editor.commit();
+                        editor.commit();*/
                     }
                 }
                 catch(Exception e)
@@ -188,69 +205,8 @@ public class SettingsFragment extends PreferenceFragment{
             }
         });
 
-        /*Preferences loaded via preference manager
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);*/
+
     }
-
-
-
-    /*
-    //Listens for changes to the preferences and will update the application in response
-    private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
-        {
-
-            if(key.equals(R.string.metricsPref))
-            {
-                //get preference values to change
-                double weight = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightKey), ""));
-                double weightGoal = Double.parseDouble(sharedPreferences.getString(getString(R.string.editWeightGoal), ""));
-                double height = Double.parseDouble(sharedPreferences.getString(getString(R.string.editHeightKey), ""));
-                //If user selects metric it will convert his preferences to metric
-                if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(R.string.metArrPref))
-                {
-                    //Convert weight to metric
-                    weight = convertWeightToMetric(weight);
-                    String convertedWeight = weight + "";
-                    weightGoal = convertWeightToMetric(weightGoal);
-                    String convertedWeightGoal = weightGoal + "";
-
-                    //Convert height to metric
-                    height = convertHeightToMetric(height);
-                    String convertedHeight = height + "";
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(getString(R.string.editWeightKey), convertedWeight);
-                    editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
-                    editor.putString(getString(R.string.editHeightKey), convertedHeight);
-                    editor.apply();
-                    editor.commit();
-                }
-
-                if(sharedPreferences.getString(getString(R.string.metricsPref),"").equals(R.string.impArrPref))
-                {
-                    //Convert weight to imperial
-                    weight = convertWeightToImperial(weight);
-                    String convertedWeight = weight + "";
-                    weightGoal = convertWeightToImperial(weightGoal);
-                    String convertedWeightGoal = weightGoal + "";
-
-                    //Convert height to imperial
-                    height = convertHeightToImperial(height);
-                    String convertedHeight = height + "";
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(getString(R.string.editWeightKey), convertedWeight);
-                    editor.putString(getString(R.string.editWeightGoal), convertedWeightGoal);
-                    editor.putString(getString(R.string.editHeightKey), convertedHeight);
-                    editor.apply();
-                    editor.commit();
-                }
-
-
-            }
-        }
-    };*/
 
     //Conversion methods for app
     private double convertWeightToMetric(double imperialHeretic)

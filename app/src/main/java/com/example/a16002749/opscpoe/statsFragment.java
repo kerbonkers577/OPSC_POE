@@ -48,6 +48,9 @@ public class statsFragment extends Fragment {
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
 
 
+
+
+
         //Shitty way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
         if(choices.equalsIgnoreCase("Metric"))
         {
