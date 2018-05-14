@@ -11,4 +11,6 @@
     <string name="editStepsGoal">editStepsGoal</string>
     <string name="impArrPref">Imperial</string>
     <string name="metArrPref">Metric</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_login">Login</string>
 </resources>
