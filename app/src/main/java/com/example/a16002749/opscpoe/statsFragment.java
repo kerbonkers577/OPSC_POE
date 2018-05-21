@@ -47,25 +47,21 @@ public class statsFragment extends Fragment {
         //Get if set to metric or imperial
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
 
-
-
-
-
-        //Shitty way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
+        //Terrible way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
         if(choices.equalsIgnoreCase("Metric"))
         {
-            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),"")) + "Kg";
-            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),"")) + "Kg";
-            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),""));
-            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),"")) + "m";
+            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),"0.0")) + "Kg";
+            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),"0.0")) + "Kg";
+            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),"0"));
+            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),"0.0")) + "m";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
         else
         {
-            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),""))) + "lbs";
-            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),""))) + "lbs";
-            String iniStepsGoal = preferences.getString(getString(R.string.editStepsGoal),"");
-            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),""))) + " Feet";
+            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),"0.0"))) + "lbs";
+            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),"0.0"))) + "lbs";
+            String iniStepsGoal = preferences.getString(getString(R.string.editStepsGoal),"0");
+            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),"0.0"))) + " Feet";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
 

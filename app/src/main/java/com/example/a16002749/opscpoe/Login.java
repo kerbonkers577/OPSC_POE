@@ -41,8 +41,8 @@ public class Login extends AppCompatActivity {
         edtPassword.addTextChangedListener(passwordEdited);
         btnLogin.setOnClickListener(loginAttempt);
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
-        prefUsername = prefs.getString("editUsername","default");
-        prefPassword = prefs.getString("editPassword","default");
+        prefUsername = prefs.getString("editUsername","");
+        prefPassword = prefs.getString("editPassword","");
     }
 
     TextWatcher usernameEdited = new TextWatcher() {
