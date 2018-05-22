@@ -9,12 +9,18 @@ import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -74,21 +80,53 @@ public class statsFragment extends Fragment {
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
 
+        //TODO: Check values from input.txt and draw graph
+        try
+        {
+            //File reading source
+            //https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android
 
+            String filePath = getContext().getFilesDir().getAbsolutePath();
+            File inputFile = new File(filePath + "/input/input.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            String line= "";
+            String fileOut = "";
+
+            //IF there is a line to be read it appends it to the fileOut variable
+            while((line = reader.readLine())!=null)
+            {
+                fileOut += line + "\n";
+            }
+
+            //Testing toast
+            //Toast.makeText(getContext(), fileOut, Toast.LENGTH_LONG).show();
+
+            //TODO: Explode lines in fileOut
+            //TODO: Possibly put them in a collection within above while loop
+
+        }
+        catch(IOException e)//Catches exception on first run as file will not exist
+        {
+            Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
+        }
         //Return inflated view for display
         return view;
     }
 
     //TODO: Reference site that implementation was carried from
+    //Source for step counting
+    //Source: http://www.edumobile.org/android/stepcounter-app-with-android-kitkat-4-4/
     @Override
     public void onResume()
     {
         super.onResume();
+        //Creates a new sensor that hanles step counting
         Sensor stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         //Check that not null and register sensor to sensor manager
         if(stepCountSensor != null)
         {
+            //Registers step counter to sensor manager an in this method assigns it a listener
             stepCountManager.registerListener(new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
