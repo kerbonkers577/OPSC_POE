@@ -1,6 +1,11 @@
 package com.example.a16002749.opscpoe;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -23,6 +30,8 @@ public class statsFragment extends Fragment {
     private TextView weightGoal;
     private TextView stepsGoal;
     private TextView height;
+    private SensorManager stepCountManager;
+    private TextView steps;
     private ArrayList<String> metImpSwitch = new ArrayList();
 
 
@@ -37,8 +46,8 @@ public class statsFragment extends Fragment {
         weightGoal = view.findViewById(R.id.txtWeightGoal);
         stepsGoal = view.findViewById(R.id.txtStepsGoal);
         height = view.findViewById(R.id.txtHeight);
-
-
+        stepCountManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        steps = view.findViewById(R.id.txtSteps);
 
         //Initial launch
         //Fragment "dies" when heading to main screen so this runs every start up
@@ -68,6 +77,34 @@ public class statsFragment extends Fragment {
 
         //Return inflated view for display
         return view;
+    }
+
+    //TODO: Reference site that implementation was carried from
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Sensor stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+        //Check that not null and register sensor to sensor manager
+        if(stepCountSensor != null)
+        {
+            stepCountManager.registerListener(new SensorEventListener() {
+                @Override
+                public void onSensorChanged(SensorEvent event) {
+                    steps.setText(String.valueOf(event.values[0]));
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                }
+            }, stepCountSensor, SensorManager.SENSOR_DELAY_UI);
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Sensor not available", Toast.LENGTH_SHORT).show();
+        }
     }
     //Set Initial values for text
     public void setInitialUserValues(String weight, String weightGoal, String stepsGoal, String height)
