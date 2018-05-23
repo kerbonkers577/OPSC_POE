@@ -13,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jjoe64.graphview.GraphView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,7 +41,6 @@ public class statsFragment extends Fragment {
     private TextView height;
     private SensorManager stepCountManager;
     private TextView steps;
-    private ArrayList<String> metImpSwitch = new ArrayList();
 
 
     @Override
@@ -62,21 +64,23 @@ public class statsFragment extends Fragment {
         //Get if set to metric or imperial
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
 
+
+
         //Terrible way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
         if(choices.equalsIgnoreCase("Metric"))
         {
-            String iniWeight = (preferences.getString(getString(R.string.editWeightKey),"0.0")) + "Kg";
-            String iniWeightGoal = (preferences.getString(getString(R.string.editWeightGoal),"0.0")) + "Kg";
-            String iniStepsGoal = (preferences.getString(getString(R.string.editStepsGoal),"0"));
-            String iniHeight = (preferences.getString(getString(R.string.editHeightKey),"0.0")) + "m";
+            String iniWeight = "Weight: " +(preferences.getString(getString(R.string.editWeightKey),"0.0")) + "Kg";
+            String iniWeightGoal = "Weight Goal: " + (preferences.getString(getString(R.string.editWeightGoal),"0.0")) + "Kg";
+            String iniStepsGoal = "Steps Goal: "+ (preferences.getString(getString(R.string.editStepsGoal),"0"));
+            String iniHeight = "Height: " + (preferences.getString(getString(R.string.editHeightKey),"0.0")) + "m";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
         else
         {
-            String iniWeight = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),"0.0"))) + "lbs";
-            String iniWeightGoal = convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),"0.0"))) + "lbs";
-            String iniStepsGoal = preferences.getString(getString(R.string.editStepsGoal),"0");
-            String iniHeight = convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),"0.0"))) + " Feet";
+            String iniWeight = "Weight: " + convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightKey),"0.0"))) + "lbs";
+            String iniWeightGoal = "Weight Goal: " + convertWeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editWeightGoal),"0.0"))) + "lbs";
+            String iniStepsGoal = "Steps Goal: " + preferences.getString(getString(R.string.editStepsGoal),"0");
+            String iniHeight = "Height: " + convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),"0.0"))) + " Feet";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
         }
 
@@ -103,6 +107,7 @@ public class statsFragment extends Fragment {
 
             //TODO: Explode lines in fileOut
             //TODO: Possibly put them in a collection within above while loop
+            //TODO: Setup graph to display user's weight progress from file information
 
         }
         catch(IOException e)//Catches exception on first run as file will not exist
@@ -113,14 +118,13 @@ public class statsFragment extends Fragment {
         return view;
     }
 
-    //TODO: Reference site that implementation was carried from
     //Source for step counting
     //Source: http://www.edumobile.org/android/stepcounter-app-with-android-kitkat-4-4/
     @Override
     public void onResume()
     {
         super.onResume();
-        //Creates a new sensor that hanles step counting
+        //Creates a new sensor that handles step counting
         Sensor stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         //Check that not null and register sensor to sensor manager
@@ -131,6 +135,7 @@ public class statsFragment extends Fragment {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     steps.setText(String.valueOf(event.values[0]));
+                    //TODO: Show some sort of progress to the user
                 }
 
                 @Override
