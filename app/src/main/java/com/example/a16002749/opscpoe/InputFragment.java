@@ -200,6 +200,8 @@ public class InputFragment extends Fragment
                         for (String[] weightInputs : inputs)
                         {
                             //TODO: Consider using double of date as this formatting is irritating
+                            //TODO: Consider breaking graph into months and supplying the num of days for each in switch and set max data points to this value
+                            //TODO: Have a look at manually changing the labels using the custom made library methods
                             //TODO: https://stackoverflow.com/questions/4772425/change-date-format-in-a-java-string <- see if you can unfuck dates
                             //Source: https://www.javatpoint.com/java-string-to-date
                             String [] dateFromEntry = weightInputs[1].split("/");
