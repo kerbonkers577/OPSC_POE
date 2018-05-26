@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -193,9 +194,11 @@ public class InputFragment extends Fragment
                         }
 
                         //Series for the graph
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         String monthForTitle = "";
                         String yearForTitle = "";
+                        ArrayList<DataPoint> dataForGraph = new ArrayList<>();
+                        ArrayList<String> labelsForGraph = new ArrayList<>();
+
                         //Collection of arrays with entries
                         for (String[] weightInputs : inputs)
                         {
@@ -206,6 +209,7 @@ public class InputFragment extends Fragment
                             //Source: https://www.javatpoint.com/java-string-to-date
                             String [] dateFromEntry = weightInputs[1].split("/");
                             int entryDay = Integer.parseInt(dateFromEntry[0]);
+                            yearForTitle = dateFromEntry[2];
 
                             switch(dateFromEntry[1])//Assigns appropriate month for title
                             {
@@ -250,11 +254,40 @@ public class InputFragment extends Fragment
                                     break;
                             }
 
-                            yearForTitle = dateFromEntry[2];
-                            DataPoint weightDateData = new DataPoint(entryDay,Integer.parseInt(weightInputs[0]));
+                            DateFormat dateForFormat = new SimpleDateFormat("dd/MM/yyyy");
+                            SimpleDateFormat stringFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                            Date formattedDate = dateForFormat.parse(weightInputs[1]);
 
-                            series.appendData(weightDateData, false, 8);
+                            //Build list for graph data points consisting of actual date values
+                            dataForGraph.add(new DataPoint(formattedDate,Double.parseDouble(weightInputs[0])));
+
+                            //Build list out of this reformatted date but use formattedDate Date obj for actual data
+                            String dateForLabel = stringFormatter.format(formattedDate);
+                            labelsForGraph.add(dateForLabel);
                         }
+
+                        int numOfLabels = 0;
+                        String [] allLabels = new String[labelsForGraph.size()];
+                        StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
+                        for(String dateLabel : labelsForGraph)
+                        {
+                            allLabels[numOfLabels] = dateLabel;
+                            numOfLabels++;
+                        }
+
+
+
+                        labelFormatter.setHorizontalLabels(allLabels);
+                        graph.getGridLabelRenderer().setLabelFormatter(labelFormatter);
+
+                        DataPoint[] dataPointsAsArray = new DataPoint[dataForGraph.size()];
+                        for(int i = 0; i < dataForGraph.size(); i++)
+                        {
+                            dataPointsAsArray[i] = dataForGraph.get(i);
+                        }
+
+                        //Assigns data points to ListGraphSeries
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsAsArray);
 
                         graph.removeAllSeries();
                         graph.setTitle(monthForTitle + " " + yearForTitle);
@@ -265,17 +298,19 @@ public class InputFragment extends Fragment
                     {
                         Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
                     }
+                    /*
                     catch(Exception e)
                     {
-                        Log.e("Exception", e.getMessage() + " stack: " + e.getStackTrace());
-                        Toast aToast = Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG);
+                        e.printStackTrace();
+                        Log.e("Graph or file handled exception", e.getStackTrace().toString());
+                        Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
                         aToast.show();
-                    }
+                    }*/
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast myToast = Toast.makeText(getContext(), "Saving Weight Failed " + e.getMessage(), Toast.LENGTH_LONG);
-                    myToast.show();
+                    //myToast.show();
                 }
             }
 
