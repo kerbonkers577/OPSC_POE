@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -66,6 +67,8 @@ public class InputFragment extends Fragment
         add.setOnClickListener(addWeight);
         dateSelectButton.setOnClickListener(dateButtonClick);
         graph = view.findViewById(R.id.graph);
+
+        drawGraph();
         return view;
     }
 
@@ -174,7 +177,7 @@ public class InputFragment extends Fragment
                     weightEntered = false;
                     dateEntered = false;
 
-                    //TODO: Update graph
+                    // Update graph
                     try
                     {
                         //File reading source
@@ -267,18 +270,36 @@ public class InputFragment extends Fragment
                         }
 
                         int numOfLabels = 0;
-                        String [] allLabels = new String[labelsForGraph.size()];
-                        StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
+                        //String [] allLabels = new String[labelsForGraph.size()];
+                        //StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
+                        /*
                         for(String dateLabel : labelsForGraph)
                         {
                             allLabels[numOfLabels] = dateLabel;
                             numOfLabels++;
-                        }
+                        }*/
 
 
 
-                        labelFormatter.setHorizontalLabels(allLabels);
-                        graph.getGridLabelRenderer().setLabelFormatter(labelFormatter);
+                        //labelFormatter.setHorizontalLabels(allLabels);
+                        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                            @Override
+                            public String formatLabel(double value, boolean isValueX) {
+                                if (isValueX) {
+                                    //
+                                    SimpleDateFormat stringFormatter = new SimpleDateFormat("dd");
+                                    String dateForLabel = stringFormatter.format(value);
+                                    return dateForLabel;
+
+                                }
+                                else
+                                {
+                                    return value+"";
+                                }
+                            }
+                        });
+
+
 
                         DataPoint[] dataPointsAsArray = new DataPoint[dataForGraph.size()];
                         for(int i = 0; i < dataForGraph.size(); i++)
@@ -298,14 +319,13 @@ public class InputFragment extends Fragment
                     {
                         Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
                     }
-                    /*
                     catch(Exception e)
                     {
                         e.printStackTrace();
                         Log.e("Graph or file handled exception", e.getStackTrace().toString());
-                        Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
-                        aToast.show();
-                    }*/
+                        //Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
+                        //aToast.show();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -319,7 +339,7 @@ public class InputFragment extends Fragment
 
     private void drawGraph()
     {
-
+        // Update graph
 
     }
 
