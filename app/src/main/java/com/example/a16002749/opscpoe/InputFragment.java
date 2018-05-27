@@ -178,154 +178,7 @@ public class InputFragment extends Fragment
                     dateEntered = false;
 
                     // Update graph
-                    try
-                    {
-                        //File reading source
-                        //https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android
-                        ArrayList<String[]>inputs = new ArrayList<>();
-                        String inFilePath = getContext().getFilesDir().getAbsolutePath();
-                        File inInputFile = new File(inFilePath + "/input/input.txt");
-                        BufferedReader reader = new BufferedReader(new FileReader(inInputFile));
-                        String line= "";
-                        String fileOut = "";
-
-                        //IF there is a line to be read it appends it to the fileOut variable
-                        while((line = reader.readLine())!=null)
-                        {
-                            fileOut = line;
-                            inputs.add(fileOut.split(","));
-                        }
-
-                        //Series for the graph
-                        String monthForTitle = "";
-                        String yearForTitle = "";
-                        ArrayList<DataPoint> dataForGraph = new ArrayList<>();
-                        ArrayList<String> labelsForGraph = new ArrayList<>();
-
-                        //Collection of arrays with entries
-                        for (String[] weightInputs : inputs)
-                        {
-                            //TODO: Consider using double of date as this formatting is irritating
-                            //TODO: Consider breaking graph into months and supplying the num of days for each in switch and set max data points to this value
-                            //TODO: Have a look at manually changing the labels using the custom made library methods
-                            //TODO: https://stackoverflow.com/questions/4772425/change-date-format-in-a-java-string <- see if you can unfuck dates
-                            //Source: https://www.javatpoint.com/java-string-to-date
-                            String [] dateFromEntry = weightInputs[1].split("/");
-                            int entryDay = Integer.parseInt(dateFromEntry[0]);
-                            yearForTitle = dateFromEntry[2];
-
-                            switch(dateFromEntry[1])//Assigns appropriate month for title
-                            {
-                                case "1":
-                                    monthForTitle = "Jan";
-                                    break;
-                                case "2":
-                                    monthForTitle = "Feb";
-                                    break;
-                                case "3":
-                                    monthForTitle = "Mar";
-                                    break;
-                                case "4":
-                                    monthForTitle = "Apr";
-                                    break;
-                                case "5":
-                                    monthForTitle = "May";
-                                    break;
-                                case "6":
-                                    monthForTitle = "Jun";
-                                    break;
-                                case "7":
-                                    monthForTitle = "Jul";
-                                    break;
-                                case "8":
-                                    monthForTitle = "Aug";
-                                    break;
-                                case "9":
-                                    monthForTitle = "Sep";
-                                    break;
-                                case "10":
-                                    monthForTitle = "Oct";
-                                    break;
-                                case "11":
-                                    monthForTitle = "Nov";
-                                    break;
-                                case "12":
-                                    monthForTitle = "Dec";
-                                    break;
-                                default:
-                                    monthForTitle = "";
-                                    break;
-                            }
-
-                            DateFormat dateForFormat = new SimpleDateFormat("dd/MM/yyyy");
-                            SimpleDateFormat stringFormatter = new SimpleDateFormat("dd/MM/yyyy");
-                            Date formattedDate = dateForFormat.parse(weightInputs[1]);
-
-                            //Build list for graph data points consisting of actual date values
-                            dataForGraph.add(new DataPoint(formattedDate,Double.parseDouble(weightInputs[0])));
-
-                            //Build list out of this reformatted date but use formattedDate Date obj for actual data
-                            String dateForLabel = stringFormatter.format(formattedDate);
-                            labelsForGraph.add(dateForLabel);
-                        }
-
-                        int numOfLabels = 0;
-                        //String [] allLabels = new String[labelsForGraph.size()];
-                        //StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
-                        /*
-                        for(String dateLabel : labelsForGraph)
-                        {
-                            allLabels[numOfLabels] = dateLabel;
-                            numOfLabels++;
-                        }*/
-
-
-
-                        //labelFormatter.setHorizontalLabels(allLabels);
-                        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
-                            @Override
-                            public String formatLabel(double value, boolean isValueX) {
-                                if (isValueX) {
-                                    //
-                                    SimpleDateFormat stringFormatter = new SimpleDateFormat("dd");
-                                    String dateForLabel = stringFormatter.format(value);
-                                    return dateForLabel;
-
-                                }
-                                else
-                                {
-                                    return value+"";
-                                }
-                            }
-                        });
-
-
-
-                        DataPoint[] dataPointsAsArray = new DataPoint[dataForGraph.size()];
-                        for(int i = 0; i < dataForGraph.size(); i++)
-                        {
-                            dataPointsAsArray[i] = dataForGraph.get(i);
-                        }
-
-                        //Assigns data points to ListGraphSeries
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsAsArray);
-
-                        graph.removeAllSeries();
-                        graph.setTitle(monthForTitle + " " + yearForTitle);
-                        graph.addSeries(series);
-
-                    }
-                    catch(IOException e)//Catches exception on first run as file will not exist
-                    {
-                        Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                        Log.e("Graph or file handled exception", e.getStackTrace().toString());
-                        //Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
-                        //aToast.show();
-                    }
+                    drawGraph();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -340,6 +193,154 @@ public class InputFragment extends Fragment
     private void drawGraph()
     {
         // Update graph
+        try
+        {
+            //File reading source
+            //https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android
+            ArrayList<String[]>inputs = new ArrayList<>();
+            String inFilePath = getContext().getFilesDir().getAbsolutePath();
+            File inInputFile = new File(inFilePath + "/input/input.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(inInputFile));
+            String line= "";
+            String fileOut = "";
+
+            //IF there is a line to be read it appends it to the fileOut variable
+            while((line = reader.readLine())!=null)
+            {
+                fileOut = line;
+                inputs.add(fileOut.split(","));
+            }
+
+            //Series for the graph
+            String monthForTitle = "";
+            String yearForTitle = "";
+            ArrayList<DataPoint> dataForGraph = new ArrayList<>();
+            ArrayList<String> labelsForGraph = new ArrayList<>();
+
+            //Collection of arrays with entries
+            for (String[] weightInputs : inputs)
+            {
+                //TODO: Consider using double of date as this formatting is irritating
+                //TODO: Consider breaking graph into months and supplying the num of days for each in switch and set max data points to this value
+                //TODO: Have a look at manually changing the labels using the custom made library methods
+                //TODO: https://stackoverflow.com/questions/4772425/change-date-format-in-a-java-string <- see if you can unfuck dates
+                //Source: https://www.javatpoint.com/java-string-to-date
+                String [] dateFromEntry = weightInputs[1].split("/");
+                int entryDay = Integer.parseInt(dateFromEntry[0]);
+                yearForTitle = dateFromEntry[2];
+
+                switch(dateFromEntry[1])//Assigns appropriate month for title
+                {
+                    case "1":
+                        monthForTitle = "Jan";
+                        break;
+                    case "2":
+                        monthForTitle = "Feb";
+                        break;
+                    case "3":
+                        monthForTitle = "Mar";
+                        break;
+                    case "4":
+                        monthForTitle = "Apr";
+                        break;
+                    case "5":
+                        monthForTitle = "May";
+                        break;
+                    case "6":
+                        monthForTitle = "Jun";
+                        break;
+                    case "7":
+                        monthForTitle = "Jul";
+                        break;
+                    case "8":
+                        monthForTitle = "Aug";
+                        break;
+                    case "9":
+                        monthForTitle = "Sep";
+                        break;
+                    case "10":
+                        monthForTitle = "Oct";
+                        break;
+                    case "11":
+                        monthForTitle = "Nov";
+                        break;
+                    case "12":
+                        monthForTitle = "Dec";
+                        break;
+                    default:
+                        monthForTitle = "";
+                        break;
+                }
+
+                DateFormat dateForFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat stringFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date formattedDate = dateForFormat.parse(weightInputs[1]);
+
+                //Build list for graph data points consisting of actual date values
+                dataForGraph.add(new DataPoint(formattedDate,Double.parseDouble(weightInputs[0])));
+
+                //Build list out of this reformatted date but use formattedDate Date obj for actual data
+                String dateForLabel = stringFormatter.format(formattedDate);
+                labelsForGraph.add(dateForLabel);
+            }
+
+            int numOfLabels = 0;
+            //String [] allLabels = new String[labelsForGraph.size()];
+            //StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
+                        /*
+                        for(String dateLabel : labelsForGraph)
+                        {
+                            allLabels[numOfLabels] = dateLabel;
+                            numOfLabels++;
+                        }*/
+
+
+
+            //labelFormatter.setHorizontalLabels(allLabels);
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        //
+                        SimpleDateFormat stringFormatter = new SimpleDateFormat("dd");
+                        String dateForLabel = stringFormatter.format(value);
+                        return dateForLabel;
+
+                    }
+                    else
+                    {
+                        return value+"";
+                    }
+                }
+            });
+
+
+
+            DataPoint[] dataPointsAsArray = new DataPoint[dataForGraph.size()];
+            for(int i = 0; i < dataForGraph.size(); i++)
+            {
+                dataPointsAsArray[i] = dataForGraph.get(i);
+            }
+
+            //Assigns data points to ListGraphSeries
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsAsArray);
+
+            graph.removeAllSeries();
+            graph.setTitle(monthForTitle + " " + yearForTitle);
+            graph.addSeries(series);
+
+        }
+        catch(IOException e)//Catches exception on first run as file will not exist
+        {
+            Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Log.e("Graph or file handled exception", e.getStackTrace().toString());
+            //Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
+            //aToast.show();
+        }
 
     }
 
