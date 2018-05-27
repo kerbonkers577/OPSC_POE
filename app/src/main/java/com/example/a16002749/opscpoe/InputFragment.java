@@ -220,13 +220,8 @@ public class InputFragment extends Fragment
             //Collection of arrays with entries
             for (String[] weightInputs : inputs)
             {
-                //TODO: Consider using double of date as this formatting is irritating
-                //TODO: Consider breaking graph into months and supplying the num of days for each in switch and set max data points to this value
-                //TODO: Have a look at manually changing the labels using the custom made library methods
-                //TODO: https://stackoverflow.com/questions/4772425/change-date-format-in-a-java-string <- see if you can unfuck dates
                 //Source: https://www.javatpoint.com/java-string-to-date
                 String [] dateFromEntry = weightInputs[1].split("/");
-                int entryDay = Integer.parseInt(dateFromEntry[0]);
                 yearForTitle = dateFromEntry[2];
 
                 switch(dateFromEntry[1])//Assigns appropriate month for title
@@ -285,16 +280,6 @@ public class InputFragment extends Fragment
             }
 
             int numOfLabels = 0;
-            //String [] allLabels = new String[labelsForGraph.size()];
-            //StaticLabelsFormatter labelFormatter = new StaticLabelsFormatter(graph);
-                        /*
-                        for(String dateLabel : labelsForGraph)
-                        {
-                            allLabels[numOfLabels] = dateLabel;
-                            numOfLabels++;
-                        }*/
-
-
 
             //labelFormatter.setHorizontalLabels(allLabels);
             graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {

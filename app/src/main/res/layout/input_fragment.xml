@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="60dp"
-    android:paddingTop="40dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp"
     android:scrollIndicators="right"
     android:scrollbars="vertical">
 
@@ -15,11 +16,12 @@
         android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_column="0"
         android:layout_row="0"
         android:gravity="center_horizontal"
         android:paddingBottom="20dp"
         android:text="Enter Your Weight Achieved"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btnDate"
@@ -27,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_row="1"
-        android:text="date" />
+        android:text="Select Date" />
 
     <EditText
         android:id="@+id/inputWeight"
@@ -45,19 +47,20 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="3dp"
         android:layout_row="3"
         android:clickable="true"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none|vertical"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@android:color/holo_blue_bright"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
+        android:layout_width="315dp"
+        android:layout_height="175dp"
         android:layout_column="0"
+        android:layout_gravity="center_horizontal"
         android:layout_row="4" />
 
 </GridLayout>
