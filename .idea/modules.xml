@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OPSCPOE.iml" filepath="$PROJECT_DIR$/OPSCPOE.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OPSC_POE.iml" filepath="$PROJECT_DIR$/OPSC_POE.iml" />
-      <module fileurl="file://C:/Users/Tristan Constable/AndroidStudioProjects/OPSCPOE/OPSC_POE.iml" filepath="C:/Users/Tristan Constable/AndroidStudioProjects/OPSCPOE/OPSC_POE.iml" />
+      <module fileurl="file://C:\Users\Tristan Constable\AndroidStudioProjects\OPSCPOE\OPSC_POE.iml" filepath="C:\Users\Tristan Constable\AndroidStudioProjects\OPSCPOE\OPSC_POE.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

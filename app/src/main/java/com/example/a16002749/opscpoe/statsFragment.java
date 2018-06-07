@@ -1,5 +1,6 @@
 package com.example.a16002749.opscpoe;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -7,12 +8,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +25,15 @@ import com.jjoe64.graphview.GraphView;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,7 +49,11 @@ public class statsFragment extends Fragment {
     private TextView height;
     private SensorManager stepCountManager;
     private TextView steps;
-
+    private FloatingActionButton fabAddSteps;
+    private String stepsToday = "";
+    private String selectedDate = "";
+    private Button setDate;
+    private boolean dateIsSet = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +68,12 @@ public class statsFragment extends Fragment {
         height = view.findViewById(R.id.txtHeight);
         stepCountManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         steps = view.findViewById(R.id.txtSteps);
+        fabAddSteps = view.findViewById(R.id.fabAddSteps);
+        setDate = view.findViewById(R.id.btnDate);
+        setDate.setOnClickListener(datePicker);
+        fabAddSteps.setOnClickListener(fabStepAddClick);
+
+
 
         //Initial launch
         //Fragment "dies" when heading to main screen so this runs every start up
@@ -135,7 +153,7 @@ public class statsFragment extends Fragment {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     steps.setText(String.valueOf(event.values[0]));
-                    //TODO: Show some sort of progress to the user
+                    stepsToday = steps.getText().toString();
                 }
 
                 @Override
@@ -149,6 +167,107 @@ public class statsFragment extends Fragment {
             Toast.makeText(getActivity(), "Sensor not available", Toast.LENGTH_SHORT).show();
         }
     }
+
+    View.OnClickListener datePicker = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            DatePickerDialog dateSelector = new DatePickerDialog(getContext());
+            dateSelector.setOnDateSetListener(userChangeDate);
+            dateSelector.setTitle("Select Date For Steps Entry");
+            dateSelector.show();
+        }
+    };
+
+    DatePickerDialog.OnDateSetListener userChangeDate = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            selectedDate = day+"/"+(month+1)+"/"+year; //Months start from 0??
+            Toast.makeText(getContext(), selectedDate, Toast.LENGTH_LONG).show();
+            dateIsSet = true;
+        }
+    };
+
+    View.OnClickListener fabStepAddClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view)
+        {
+
+            if(dateIsSet == true)
+            {
+                //TODO: Save steps for today and update graph
+                String fileContents = stepsToday + "," + selectedDate;
+                FileOutputStream outputStream;
+                String filePath = getContext().getFilesDir().getAbsolutePath();
+                File newfile = new File(filePath + "/input");
+                File inputFile = new File(filePath + "/input/steps.txt");
+
+                try {
+                    if(!newfile.isDirectory())//If input dir doesn't exists
+                    {
+                        newfile.mkdir();
+                        if(!inputFile.isFile())//Check if file exists
+                        {
+                            newfile.createNewFile();
+                            outputStream = new FileOutputStream(inputFile, true);
+                            outputStream.write(fileContents.getBytes());
+                            outputStream.close();
+                        }
+                        else {
+                            outputStream = new FileOutputStream(inputFile, true);
+                            outputStream.write(fileContents.getBytes());
+                            outputStream.close();
+                        }
+                    }
+                    else//If input exist
+                    {
+
+                        if(!inputFile.isFile())//Check if file exists
+                        {
+                            newfile.createNewFile();
+                            outputStream = new FileOutputStream(inputFile, true);
+                            outputStream.write(fileContents.getBytes());
+                            outputStream.close();
+                        }
+                        else {
+                            outputStream = new FileOutputStream(inputFile, true);
+                            outputStream.write(fileContents.getBytes());
+                            outputStream.close();
+                        }
+                    }
+
+
+                    Toast myToast = Toast.makeText(getContext(), "Steps saved", Toast.LENGTH_SHORT);
+                    myToast.show();
+
+
+
+                    // Update graph
+                    drawGraph();
+                    dateIsSet = false;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast myToast = Toast.makeText(getContext(), "Saving Steps Failed " + e.getMessage(), Toast.LENGTH_LONG);
+                    myToast.show();
+                }
+            }
+            else
+            {
+                Toast myToast = Toast.makeText(getContext(), "No Date Set", Toast.LENGTH_SHORT);
+                myToast.show();
+            }
+
+        }
+    };
+
+
+
+    //Drawing graph from values in file
+    public void drawGraph()
+    {
+        //TODO: Fetch graph info and draw it
+    }
+
     //Set Initial values for text
     public void setInitialUserValues(String weight, String weightGoal, String stepsGoal, String height)
     {
