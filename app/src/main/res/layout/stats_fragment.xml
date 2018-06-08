@@ -52,7 +52,7 @@
         android:text="placeHolder" />
 
     <TextView
-        android:id="@+id/btnSteps"
+        android:id="@+id/stepsProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"

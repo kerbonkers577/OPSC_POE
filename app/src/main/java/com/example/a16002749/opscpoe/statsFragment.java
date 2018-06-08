@@ -54,7 +54,7 @@ public class statsFragment extends Fragment {
     private String selectedDate = "";
     private Button setDate;
     private boolean dateIsSet = false;
-
+    private Sensor stepCountSensor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -143,30 +143,47 @@ public class statsFragment extends Fragment {
     {
         super.onResume();
         //Creates a new sensor that handles step counting
-        Sensor stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         //Check that not null and register sensor to sensor manager
         if(stepCountSensor != null)
         {
             //Registers step counter to sensor manager an in this method assigns it a listener
-            stepCountManager.registerListener(new SensorEventListener() {
-                @Override
-                public void onSensorChanged(SensorEvent event) {
-                    steps.setText(String.valueOf(event.values[0]));
-                    stepsToday = steps.getText().toString();
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                }
-            }, stepCountSensor, SensorManager.SENSOR_DELAY_UI);
+            stepCountManager.registerListener(stepEvent, stepCountSensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
         else
         {
             Toast.makeText(getActivity(), "Sensor not available", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if(stepCountSensor != null)
+        {
+            //Registers step counter to sensor manager an in this method assigns it a listener
+            stepCountManager.unregisterListener(stepEvent);
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Sensor not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    SensorEventListener stepEvent = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            steps.setText(String.valueOf(sensorEvent.values[0]));
+            stepsToday = steps.getText().toString();
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
 
     View.OnClickListener datePicker = new View.OnClickListener() {
         @Override
