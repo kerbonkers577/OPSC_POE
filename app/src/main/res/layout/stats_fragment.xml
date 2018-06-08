@@ -52,7 +52,7 @@
         android:text="placeHolder" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/btnSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"
@@ -93,5 +93,15 @@
         android:clickable="true"
         android:paddingLeft="10dp"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_row="6" />
 
 </GridLayout>
