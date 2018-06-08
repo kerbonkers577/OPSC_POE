@@ -157,26 +157,10 @@ public class statsFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        if(stepCountSensor != null)
-        {
-            //Registers step counter to sensor manager an in this method assigns it a listener
-            stepCountManager.unregisterListener(stepEvent);
-        }
-        else
-        {
-            Toast.makeText(getActivity(), "Sensor not available", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     SensorEventListener stepEvent = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             steps.setText(String.valueOf(sensorEvent.values[0]));
-            stepsToday = steps.getText().toString();
         }
 
         @Override
@@ -260,7 +244,6 @@ public class statsFragment extends Fragment {
 
                     // Update graph
                     drawGraph();
-                    dateIsSet = false;
 
                 } catch (Exception e) {
                     e.printStackTrace();
