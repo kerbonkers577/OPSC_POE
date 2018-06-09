@@ -55,6 +55,8 @@ public class statsFragment extends Fragment {
     private Button setDate;
     private boolean dateIsSet = false;
     private Sensor stepCountSensor;
+    private SharedPreferences colourPref;
+    private double currentStepGoal= 0.0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,9 +81,10 @@ public class statsFragment extends Fragment {
         //Fragment "dies" when heading to main screen so this runs every start up
         //Instead of this senseless killing, I might pause it
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         //Get if set to metric or imperial
         String choices = preferences.getString(getString(R.string.metricsPref),"Failed");
-
+        colourPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 
         //Terrible way of converting between the two which does not allow the user to work in imperial or metric only metric then having the option to convert
@@ -92,6 +95,7 @@ public class statsFragment extends Fragment {
             String iniStepsGoal = "Steps Goal: "+ (preferences.getString(getString(R.string.editStepsGoal),"0"));
             String iniHeight = "Height: " + (preferences.getString(getString(R.string.editHeightKey),"0.0")) + "m";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
+
         }
         else
         {
@@ -100,7 +104,10 @@ public class statsFragment extends Fragment {
             String iniStepsGoal = "Steps Goal: " + preferences.getString(getString(R.string.editStepsGoal),"0");
             String iniHeight = "Height: " + convertHeightToImperial(Double.parseDouble(preferences.getString(getString(R.string.editHeightKey),"0.0"))) + " Feet";
             setInitialUserValues(iniWeight, iniWeightGoal, iniStepsGoal, iniHeight);
+
         }
+
+        currentStepGoal = Double.parseDouble((preferences.getString(getString(R.string.editStepsGoal),"0")));
 
         //TODO: Check values from input.txt and draw graph
         try
@@ -141,6 +148,7 @@ public class statsFragment extends Fragment {
     @Override
     public void onResume()
     {
+
         super.onResume();
         //Creates a new sensor that handles step counting
         stepCountSensor = stepCountManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -160,7 +168,32 @@ public class statsFragment extends Fragment {
     SensorEventListener stepEvent = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            steps.setText(String.valueOf(sensorEvent.values[0]));
+            try
+            {
+                colourPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                steps.setText(String.valueOf(sensorEvent.values[0]));
+                if((sensorEvent.values[0] / currentStepGoal ) < 0.33)
+                {
+                    steps.setTextColor(getResources().getColor(R.color.oneThirdComplete, null));
+                }
+                else if (sensorEvent.values[0] < currentStepGoal)
+                {
+                    steps.setTextColor(getResources().getColor(R.color.twoThirdComplete, null));
+                }
+                else if (sensorEvent.values[0] >= currentStepGoal)
+                {
+                    steps.setTextColor(getResources().getColor(R.color.complete, null));
+                }
+            }
+            catch(NullPointerException e)
+            {
+                Log.e("ColourCrash", e.getStackTrace().toString());
+            }
+            catch(Exception e)
+            {
+                Log.e("ColourCrash", e.getStackTrace().toString());
+            }
+
         }
 
         @Override
