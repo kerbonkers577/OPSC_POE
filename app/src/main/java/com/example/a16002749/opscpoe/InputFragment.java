@@ -193,6 +193,8 @@ public class InputFragment extends Fragment
     private void drawGraph()
     {
         // Update graph
+        //Graph source:
+        // http://www.android-graphview.org/
         try
         {
             //File reading source
