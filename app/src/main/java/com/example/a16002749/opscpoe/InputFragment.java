@@ -3,6 +3,9 @@ package com.example.a16002749.opscpoe;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -205,7 +208,7 @@ public class InputFragment extends Fragment
             BufferedReader reader = new BufferedReader(new FileReader(inInputFile));
             String line= "";
             String fileOut = "";
-
+            String lastWeight = "";
             //IF there is a line to be read it appends it to the fileOut variable
             while((line = reader.readLine())!=null)
             {
@@ -279,6 +282,8 @@ public class InputFragment extends Fragment
                 //Build list out of this reformatted date but use formattedDate Date obj for actual data
                 String dateForLabel = stringFormatter.format(formattedDate);
                 labelsForGraph.add(dateForLabel);
+
+                lastWeight = weightInputs[0];
             }
 
             int numOfLabels = 0;
@@ -312,7 +317,22 @@ public class InputFragment extends Fragment
             //Assigns data points to ListGraphSeries
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsAsArray);
 
-            graph.removeAllSeries();
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+            double lastWeightCon = Double.parseDouble(lastWeight);
+            double weightGoal = Double.parseDouble(pref.getString(getString(R.string.editWeightGoal), "0"));
+
+            if((lastWeightCon - weightGoal) >= 50)
+            {
+                series.setColor(Color.RED);
+            }
+            else if ((lastWeightCon - weightGoal)  >= 25)
+            {
+                series.setColor(Color.rgb(255, 127, 80));//Orange
+            }
+            else
+            {
+                series.setColor(Color.GREEN);
+            }
             graph.setTitle(monthForTitle + " " + yearForTitle);
             graph.addSeries(series);
 

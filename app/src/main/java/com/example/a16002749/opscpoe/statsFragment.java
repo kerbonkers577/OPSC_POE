@@ -3,6 +3,7 @@ package com.example.a16002749.opscpoe;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,7 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,13 +55,14 @@ public class statsFragment extends Fragment {
     private SensorManager stepCountManager;
     private TextView steps;
     private FloatingActionButton fabAddSteps;
-    private String stepsToday = "";
+    private String stepsToday = "0";
     private String selectedDate = "";
     private Button setDate;
     private boolean dateIsSet = false;
     private Sensor stepCountSensor;
     private SharedPreferences colourPref;
     private double currentStepGoal= 0.0;
+    private GraphView graph;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,9 +80,10 @@ public class statsFragment extends Fragment {
         setDate = view.findViewById(R.id.btnDate);
         setDate.setOnClickListener(datePicker);
         fabAddSteps.setOnClickListener(fabStepAddClick);
+        graph = view.findViewById(R.id.graph);
 
 
-
+        drawGraph();
         //Initial launch
         //Fragment "dies" when heading to main screen so this runs every start up
         //Instead of this senseless killing, I might pause it
@@ -184,6 +191,7 @@ public class statsFragment extends Fragment {
                 {
                     steps.setTextColor(getResources().getColor(R.color.complete, null));
                 }
+                stepsToday = String.valueOf(sensorEvent.values[0]);
             }
             catch(NullPointerException e)
             {
@@ -229,7 +237,11 @@ public class statsFragment extends Fragment {
             if(dateIsSet == true)
             {
                 //TODO: Save steps for today and update graph
-                String fileContents = stepsToday + "," + selectedDate;
+                if(stepsToday == null)
+                {
+                    stepsToday = "0";
+                }
+                String fileContents = stepsToday + "," + selectedDate + "\n";
                 FileOutputStream outputStream;
                 String filePath = getContext().getFilesDir().getAbsolutePath();
                 File newfile = new File(filePath + "/input");
@@ -299,6 +311,157 @@ public class statsFragment extends Fragment {
     public void drawGraph()
     {
         //TODO: Fetch graph info and draw it
+        try
+        {
+            //File reading source
+            //https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android
+            ArrayList<String[]>inputs = new ArrayList<>();
+            String inFilePath = getContext().getFilesDir().getAbsolutePath();
+            File inInputFile = new File(inFilePath + "/input/steps.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(inInputFile));
+            String line= "";
+            String fileOut = "";
+            String lastSteps = "";
+            //IF there is a line to be read it appends it to the fileOut variable
+            while((line = reader.readLine())!=null)
+            {
+                fileOut = line;
+                inputs.add(fileOut.split(","));
+            }
+
+            //Series for the graph
+            String monthForTitle = "";
+            String yearForTitle = "";
+            ArrayList<DataPoint> dataForGraph = new ArrayList<>();
+            ArrayList<String> labelsForGraph = new ArrayList<>();
+
+            //Collection of arrays with entries
+            for (String[] weightInputs : inputs)
+            {
+                //Source: https://www.javatpoint.com/java-string-to-date
+                String [] dateFromEntry = weightInputs[1].split("/");
+                yearForTitle = dateFromEntry[2];
+
+                switch(dateFromEntry[1])//Assigns appropriate month for title
+                {
+                    case "1":
+                        monthForTitle = "Jan";
+                        break;
+                    case "2":
+                        monthForTitle = "Feb";
+                        break;
+                    case "3":
+                        monthForTitle = "Mar";
+                        break;
+                    case "4":
+                        monthForTitle = "Apr";
+                        break;
+                    case "5":
+                        monthForTitle = "May";
+                        break;
+                    case "6":
+                        monthForTitle = "Jun";
+                        break;
+                    case "7":
+                        monthForTitle = "Jul";
+                        break;
+                    case "8":
+                        monthForTitle = "Aug";
+                        break;
+                    case "9":
+                        monthForTitle = "Sep";
+                        break;
+                    case "10":
+                        monthForTitle = "Oct";
+                        break;
+                    case "11":
+                        monthForTitle = "Nov";
+                        break;
+                    case "12":
+                        monthForTitle = "Dec";
+                        break;
+                    default:
+                        monthForTitle = "";
+                        break;
+                }
+
+                DateFormat dateForFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat stringFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date formattedDate = dateForFormat.parse(weightInputs[1]);
+
+                //Build list for graph data points consisting of actual date values
+                dataForGraph.add(new DataPoint(formattedDate,Double.parseDouble(weightInputs[0])));
+
+                //Build list out of this reformatted date but use formattedDate Date obj for actual data
+                String dateForLabel = stringFormatter.format(formattedDate);
+                labelsForGraph.add(dateForLabel);
+
+                lastSteps = weightInputs[0];
+            }
+
+            int numOfLabels = 0;
+
+            //labelFormatter.setHorizontalLabels(allLabels);
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        //
+                        SimpleDateFormat stringFormatter = new SimpleDateFormat("dd");
+                        String dateForLabel = stringFormatter.format(value);
+                        return dateForLabel;
+
+                    }
+                    else
+                    {
+                        return value+"";
+                    }
+                }
+            });
+
+
+
+            DataPoint[] dataPointsAsArray = new DataPoint[dataForGraph.size()];
+            for(int i = 0; i < dataForGraph.size(); i++)
+            {
+                dataPointsAsArray[i] = dataForGraph.get(i);
+            }
+
+            //Assigns data points to ListGraphSeries
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsAsArray);
+
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+            double laststepsCon = Double.parseDouble(lastSteps);
+            double stepsGoal = Double.parseDouble(pref.getString(getString(R.string.editStepsGoal), "0"));
+
+            if((laststepsCon - stepsGoal) <= 50)
+            {
+                series.setColor(Color.RED);
+            }
+            else if ((laststepsCon - stepsGoal)  <= 25)
+            {
+                series.setColor(Color.rgb(255, 127, 80));//Orange
+            }
+            else if(laststepsCon - stepsGoal >= stepsGoal)
+            {
+                series.setColor(Color.GREEN);
+            }
+            graph.setTitle(monthForTitle + " " + yearForTitle);
+            graph.addSeries(series);
+
+        }
+        catch(IOException e)//Catches exception on first run as file will not exist
+        {
+            Log.e("File Read Fail", e.getMessage() + " stack: " + e.getStackTrace());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Log.e("Graph or file handled exception", e.getStackTrace().toString());
+            //Toast aToast = Toast.makeText(getContext(), e.getMessage() + "Done Goofed", Toast.LENGTH_LONG);
+            //aToast.show();
+        }
+
     }
 
     //Set Initial values for text
